@@ -42,16 +42,32 @@ function Get-Subnet {
             Description
             -----------
             Returns the subnet details for two specified networks.
-    #>
+	#>
+	[CmdletBinding(DefaultParametersetName="MaskBits")]
     param ( 
-        [parameter(ValueFromPipeline)]
+		[parameter(
+			ValueFromPipeline,
+			Position = 0
+		)]
         [string]
         $IP,
 
+		[parameter(
+			ParameterSetName="MaskBits",
+			Position = 1
+		)]
         [ValidateRange(0, 32)]
         [Alias('CIDR')]
         [int]
-        $MaskBits,
+		$MaskBits,
+		
+		[parameter(
+			ParameterSetName="SubnetMask",
+			Position = 1
+		)]
+        [ValidatePattern("(((255\.){3}(255|254|252|248|240|224|192|128|0+))|((255\.){2}(255|254|252|248|240|224|192|128|0+)\.0)|((255\.)(255|254|252|248|240|224|192|128|0+)(\.0+){2})|((255|254|252|248|240|224|192|128|0+)(\.0+){3}))")]
+        [string]
+        $SubnetMask,
 
         [switch]
         $Force
@@ -60,7 +76,10 @@ function Get-Subnet {
 
         if ($PSBoundParameters.ContainsKey('MaskBits')) { 
             $Mask = $MaskBits 
-        }
+		}
+		if ($PSBoundParameters.ContainsKey('SubnetMask')) {
+			$Mask = ConvertTo-MaskLength -SubnetMask $SubnetMask
+		}
 
         if (-not $IP) { 
             $LocalIP = (Get-NetIPAddress | Where-Object { $_.AddressFamily -eq 'IPv4' -and $_.PrefixOrigin -ne 'WellKnown' })
