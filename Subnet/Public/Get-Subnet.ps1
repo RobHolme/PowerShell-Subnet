@@ -10,7 +10,10 @@ function Get-Subnet {
             The network IP address or IP address with subnet mask via slash notation.
 
         .PARAMETER MaskBits
-            The numerical representation of the subnet mask.
+			The numerical representation of the subnet mask.
+			
+		.PARAMETER SubnetMask
+			The decimal representation of the subnet (xxx.xxx.xxx.xxx) 
 
         .PARAMETER Force
             Use to force the return of all host IP addresses regardless of the subnet size (skipped by default for subnets larger than /16).
@@ -29,6 +32,13 @@ function Get-Subnet {
             -----------
             Returns the subnet details for the specified network and mask.
 
+		.EXAMPLE
+            Get-Subnet 192.168.0.1 -SubnetMask 255.255.255.240
+
+            Description
+            -----------
+			Returns the subnet details for the specified network and mask.
+			
         .EXAMPLE
             Get-Subnet
 
