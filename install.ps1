@@ -129,7 +129,10 @@ function Get-ModuleName {
 }
 
 
+# The module manaifest (and module) is located in the 'Subnet' folder 
+cd Subnet
 
+# Obtain the module name, version, and root modules path - all needed to construct the desitination path
 $moduleVersion = Get-ModuleVersion
 $moduleRootPath = Join-Path -Path (Get-PSModulePath -moduleScope $Scope) -ChildPath "Modules"
 $moduleName = Get-ModuleName
